@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Image Grading - Professional Photo Analysis</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-camera-retro"></i>
+                    <h1>ML Image Grading</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-view="single">
+                        <i class="fas fa-image"></i> Single Image
+                    </button>
+                    <button class="nav-btn" data-view="batch">
+                        <i class="fas fa-images"></i> Batch Process
+                    </button>
+                    <button class="nav-btn" data-view="statistics">
+                        <i class="fas fa-chart-bar"></i> Statistics
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Single Image View -->
+            <div id="single-view" class="view active">
+                <div class="upload-section">
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Your Photo</h2>
+                        <p>Drag & drop or click to select</p>
+                        <p class="file-types">Supports: CR2, JPG, PNG, TIFF</p>
+                        <input type="file" id="file-input" accept=".cr2,.jpg,.jpeg,.png,.tiff,.bmp" hidden>
+                        <button class="btn btn-primary" id="select-file-btn">Select File</button>
+                    </div>
+                </div>
+
+                <div id="processing-section" class="processing-section hidden">
+                    <div class="processing-indicator">
+                        <div class="spinner"></div>
+                        <p>Analyzing your image...</p>
+                    </div>
+                </div>
+
+                <div id="results-section" class="results-section hidden">
+                    <div class="results-layout">
+                        <!-- Image Comparison -->
+                        <div class="image-comparison">
+                            <div class="image-viewer">
+                                <div class="viewer-tabs">
+                                    <button class="tab-btn active" data-tab="comparison">Comparison</button>
+                                    <button class="tab-btn" data-tab="original">Original</button>
+                                    <button class="tab-btn" data-tab="edited">Edited</button>
+                                    <button class="tab-btn" data-tab="preview">Live Preview</button>
+                                </div>
+                                <div class="viewer-content">
+                                    <div id="comparison-tab" class="tab-content active">
+                                        <img id="comparison-image" alt="Comparison">
+                                    </div>
+                                    <div id="original-tab" class="tab-content">
+                                        <img id="original-image" alt="Original">
+                                    </div>
+                                    <div id="edited-tab" class="tab-content">
+                                        <img id="edited-image" alt="Edited">
+                                    </div>
+                                    <div id="preview-tab" class="tab-content">
+                                        <img id="preview-image" alt="Preview">
+                                        <div class="preview-controls">
+                                            <h3>Real-Time Adjustments</h3>
+                                            <div class="control-group">
+                                                <label>Brightness: <span id="brightness-value">0</span></label>
+                                                <input type="range" id="brightness-slider" min="-0.3" max="0.3" step="0.01" value="0">
+                                            </div>
+                                            <div class="control-group">
+                                                <label>Contrast: <span id="contrast-value">1.0</span></label>
+                                                <input type="range" id="contrast-slider" min="0.5" max="2.0" step="0.05" value="1.0">
+                                            </div>
+                                            <div class="control-group">
+                                                <label>Saturation: <span id="saturation-value">1.0</span></label>
+                                                <input type="range" id="saturation-slider" min="0.5" max="2.0" step="0.05" value="1.0">
+                                            </div>
+                                            <div class="control-group">
+                                                <label>Temperature: <span id="temperature-value">0</span></label>
+                                                <input type="range" id="temperature-slider" min="-0.2" max="0.2" step="0.01" value="0">
+                                            </div>
+                                            <div class="control-group">
+                                                <label>Sharpness: <span id="sharpness-value">0</span></label>
+                                                <input type="range" id="sharpness-slider" min="0" max="2.0" step="0.1" value="0">
+                                            </div>
+                                            <button class="btn btn-secondary" id="reset-preview-btn">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scores and Suggestions -->
+                        <div class="analysis-panel">
+                            <div class="scores-card">
+                                <h3>Quality Scores</h3>
+                                <div class="score-item">
+                                    <div class="score-label">Overall Quality</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" id="overall-score-fill"></div>
+                                        <span class="score-text" id="overall-score-text">--</span>
+                                    </div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-label">Composition</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" id="composition-score-fill"></div>
+                                        <span class="score-text" id="composition-score-text">--</span>
+                                    </div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-label">Color Quality</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" id="color-score-fill"></div>
+                                        <span class="score-text" id="color-score-text">--</span>
+                                    </div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-label">Technical Quality</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" id="technical-score-fill"></div>
+                                        <span class="score-text" id="technical-score-text">--</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="suggestions-card">
+                                <h3>Improvement Suggestions</h3>
+                                <div id="suggestions-list" class="suggestions-list">
+                                    <!-- Suggestions will be populated here -->
+                                </div>
+                            </div>
+
+                            <div class="actions-card">
+                                <button class="btn btn-primary btn-block" id="download-btn">
+                                    <i class="fas fa-download"></i> Download Edited Image
+                                </button>
+                                <button class="btn btn-secondary btn-block" id="new-image-btn">
+                                    <i class="fas fa-plus"></i> Analyze Another Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Processing View -->
+            <div id="batch-view" class="view">
+                <div class="batch-container">
+                    <div class="batch-upload">
+                        <div class="upload-area" id="batch-upload-area">
+                            <i class="fas fa-images"></i>
+                            <h2>Batch Upload</h2>
+                            <p>Upload multiple images for processing</p>
+                            <input type="file" id="batch-file-input" multiple accept=".cr2,.jpg,.jpeg,.png,.tiff,.bmp" hidden>
+                            <button class="btn btn-primary" id="select-batch-btn">Select Multiple Files</button>
+                        </div>
+                        <div id="batch-file-list" class="batch-file-list hidden">
+                            <h3>Selected Files (<span id="batch-file-count">0</span>)</h3>
+                            <div id="batch-files"></div>
+                            <button class="btn btn-success btn-block" id="process-batch-btn">
+                                <i class="fas fa-cogs"></i> Process All Images
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="batch-processing" class="batch-processing hidden">
+                        <div class="processing-indicator">
+                            <div class="spinner"></div>
+                            <p>Processing batch...</p>
+                            <p class="batch-progress"><span id="batch-current">0</span> / <span id="batch-total">0</span> images</p>
+                        </div>
+                    </div>
+
+                    <div id="batch-results" class="batch-results hidden">
+                        <div class="batch-results-header">
+                            <h2>Batch Results</h2>
+                            <button class="btn btn-secondary" id="new-batch-btn">New Batch</button>
+                        </div>
+                        <div class="batch-results-grid" id="batch-results-grid">
+                            <!-- Results will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics View -->
+            <div id="statistics-view" class="view">
+                <div class="statistics-container">
+                    <h2>Processing Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-images"></i>
+                            <div class="stat-value" id="total-processed">--</div>
+                            <div class="stat-label">Total Images Processed</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <div class="stat-value" id="avg-score">--</div>
+                            <div class="stat-label">Average Quality Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-comments"></i>
+                            <div class="stat-value" id="total-feedback">--</div>
+                            <div class="stat-label">Feedback Submissions</div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="stat-value" id="model-accuracy">--</div>
+                            <div class="stat-label">Model Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 ML Image Grading System | Made for photographers and ML enthusiasts</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
