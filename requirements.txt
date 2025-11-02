@@ -1,3 +1,4 @@
+# Core ML and Image Processing
 numpy>=1.21.0
 opencv-python>=4.5.0
 Pillow>=9.0.0
@@ -7,3 +8,12 @@ tensorflow>=2.10.0
 scikit-learn>=1.0.0
 scipy>=1.7.0
 matplotlib>=3.5.0
+
+# Web Framework and API
+Flask>=2.3.0
+flask-cors>=4.0.0
+Werkzeug>=2.3.0
+gunicorn>=21.2.0
+
+# Additional utilities
+python-dotenv>=1.0.0

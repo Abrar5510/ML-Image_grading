@@ -1,0 +1,25 @@
+services:
+  # Web Service
+  - type: web
+    name: ml-image-grading
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DEBUG
+        value: false
+      - key: PYTHON_VERSION
+        value: 3.10
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: ml-image-data
+      mountPath: /app/data
+      sizeGB: 10
+
+# Environment variables that should be set in Render dashboard:
+# - MODEL_PATH (optional): Path to pre-trained model
+# - MAX_WORKERS (optional): Number of Gunicorn workers, default is 4

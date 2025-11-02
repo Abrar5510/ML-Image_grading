@@ -61,7 +61,61 @@ pip install -r requirements.txt
 - Train your own on Kaggle (see below), or
 - Download a pre-trained model and place it in `models/`
 
-## Usage
+## Web Interface
+
+The ML Image Grading system now includes a full-featured web application with:
+
+### Features
+
+- **Single Image Processing**: Upload and analyze individual photos
+- **Real-Time Preview**: Adjust brightness, contrast, saturation, temperature, and sharpness in real-time
+- **Batch Processing GUI**: Upload and process multiple images simultaneously
+- **Quality Scores**: Visual dashboard showing composition, color, and technical quality scores
+- **Smart Suggestions**: Prioritized improvement recommendations
+- **Mobile-Responsive**: Works on desktop, tablet, and mobile devices
+- **Dark Theme**: Modern, photographer-friendly interface
+
+### Running the Web Application
+
+#### Local Development
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the web server
+python app.py
+```
+
+Access at `http://localhost:5000`
+
+#### Using Docker
+
+```bash
+# Using Docker Compose (recommended)
+docker-compose up
+
+# Or using Docker directly
+docker build -t ml-image-grading .
+docker run -p 5000:10000 ml-image-grading
+```
+
+#### Deploy to Render (Cloud Hosting)
+
+1. **Fork this repository** to your GitHub account
+
+2. **Sign up at [Render](https://render.com)**
+
+3. **Create New Web Service**:
+   - Connect your GitHub repository
+   - Render will auto-detect the configuration
+   - Click "Create Web Service"
+
+4. **Your app will be live** at `https://your-app-name.onrender.com`
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)
+
+## Command Line Usage
 
 ### Quick Start
 
@@ -433,11 +487,11 @@ If you use this project in your research, please cite:
 - [x] Automatic editing
 - [x] Feedback system
 - [x] Kaggle training support
-- [ ] Web interface
-- [ ] Real-time preview
-- [ ] Batch editing GUI
-- [ ] Cloud deployment
-- [ ] Mobile app
+- [x] Web interface
+- [x] Real-time preview
+- [x] Batch editing GUI
+- [x] Cloud deployment (Render)
+- [x] Mobile-responsive web app
 
 ---
 
