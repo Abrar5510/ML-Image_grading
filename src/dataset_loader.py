@@ -34,7 +34,7 @@ class AdobeFiveKLoader:
         """
         self.dataset_path = Path(dataset_path)
         self.expert = expert.lower()
-        self.original_path = self.dataset_path / 'original'
+        self.original_path = self.dataset_path / 'raw'
         self.edited_path = self.dataset_path / f'expert_{self.expert}'
 
         if not self.original_path.exists():
