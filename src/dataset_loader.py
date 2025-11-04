@@ -23,7 +23,7 @@ class AdobeFiveKLoader:
     - expert_a/, expert_b/, expert_c/, expert_d/, expert_e/: Expert-edited versions
     """
 
-    def __init__(self, dataset_path: str, expert: str = 'c'):
+    def __init__(self, dataset_path: str = 'c'):
         """
         Initialize the Adobe FiveK loader.
 
