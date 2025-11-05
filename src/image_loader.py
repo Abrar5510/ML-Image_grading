@@ -3,7 +3,6 @@ Image Loader Module
 Handles loading CR2 (Canon Raw) images and converting them to processable formats.
 """
 
-import rawpy
 import imageio
 import numpy as np
 from PIL import Image
@@ -25,7 +24,7 @@ class CR2ImageLoader:
 
     def load_cr2(self, file_path: str) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Load a CR2 image file.
+        Load a CR2 image file using OpenCV.
 
         Args:
             file_path: Path to the CR2 file
@@ -34,17 +33,24 @@ class CR2ImageLoader:
             Tuple of (original_image, preprocessed_image)
             - original_image: Full resolution RGB image
             - preprocessed_image: Resized and normalized image for ML processing
+
+        Note:
+            CR2 support in OpenCV depends on system configuration.
+            If CR2 loading fails, consider converting files to JPEG/PNG first.
         """
         try:
-            # Read CR2 file
-            with rawpy.imread(file_path) as raw:
-                # Process to RGB
-                rgb = raw.postprocess(
-                    use_camera_wb=True,  # Use camera white balance
-                    half_size=False,      # Full resolution
-                    no_auto_bright=False, # Auto brightness
-                    output_bps=8          # 8-bit output
+            # Read CR2 file using OpenCV
+            # IMREAD_COLOR reads as BGR, we'll convert to RGB
+            img_bgr = cv2.imread(file_path, cv2.IMREAD_COLOR)
+
+            if img_bgr is None:
+                raise RuntimeError(
+                    f"Failed to load CR2 file. OpenCV couldn't read the file. "
+                    f"Consider converting CR2 files to JPEG or PNG format first."
                 )
+
+            # Convert BGR to RGB
+            rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
 
             # Convert to float32 for processing
             original = rgb.astype(np.float32) / 255.0
