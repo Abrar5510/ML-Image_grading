@@ -400,8 +400,7 @@ The scoring model uses a hybrid architecture:
 
 - Python 3.8+
 - TensorFlow 2.10+
-- OpenCV
-- rawpy (for CR2 support)
+- OpenCV (for image processing and CR2 support)
 - NumPy, SciPy, Pillow
 - See `requirements.txt` for complete list
 
@@ -421,10 +420,18 @@ The scoring model uses a hybrid architecture:
 
 ### CR2 Files Not Loading
 
-Install rawpy dependencies:
+The system uses OpenCV for loading CR2 files. If CR2 files fail to load:
+
+1. **Convert to JPEG/PNG first**: Use Adobe Lightroom, RawTherapee, or command-line tools
+2. **Check OpenCV installation**: Ensure opencv-python is properly installed
+3. **Alternative**: Use standard image formats (JPEG, PNG) which are fully supported
+
 ```bash
-brew install libraw  # macOS
-pip install rawpy --no-binary rawpy
+# Convert CR2 to JPEG using dcraw (if available)
+dcraw -c -w image.CR2 > image.jpg
+
+# Or use ImageMagick
+convert image.CR2 image.jpg
 ```
 
 ### Out of Memory
@@ -459,7 +466,7 @@ MIT License - See LICENSE file for details
 
 - Adobe FiveK dataset creators
 - TensorFlow and Keras teams
-- rawpy and OpenCV communities
+- OpenCV community
 
 ## Citation
 
